@@ -1,1 +1,16 @@
-{"teacher": [{"username": "a", "password": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb"}]}
+{
+    "teacher": [
+        {
+            "username": "amiri",
+            "password": "e6e58c5e6a69d960c7b3f9e8bf28960728456d54cc3d2d1f000a6ce6315c2aa7"
+        },
+        {
+            "username": "ahmadi",
+            "password": "2e4b5e102a30bb5f5819f0799286539d8a82b60c440e42f41bf2845b9e690d6a"
+        },
+        {
+            "username": "cmxxb",
+            "password": "64daa44ad493ff28a96effab6e77f1732a3d97d83241581b37dbd70a7a4900fe"
+        }
+    ]
+}

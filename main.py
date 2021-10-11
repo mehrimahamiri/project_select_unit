@@ -1,3 +1,5 @@
+__ = "In the name of God"
+
 import os
 from colorama import Fore, Style, init
 import hashlib
@@ -8,11 +10,12 @@ from prettytable import PrettyTable
 
 files = ["db_st.json", "db_re.json", "db_te.json", "db_course.json"]
 for i in files:
-    if not os.path.exists(i):  # age in address mojod nabod
-        json.dump({}, open(i, "w"))
+    if not os.path.exists(i):  # age in address mojod nabod dump kon /sakht difalt data base
+        json.dump({}, open(i, "w"),indent=4)   # open(i, "w") حکم ساخت اون دیتا بیس رو داره
 
-clr = "clear" if sys.platform == "linux" else "cls"
+clr = "clear" if sys.platform == "linux" else "cls" # در برنامه های مختلف پاک کردن صفحه 
 
+temp_username = None
 
 class App:
     init()
@@ -43,7 +46,7 @@ please chose number : """
 
         print(self.menu_main_app, end="")
         while True:  # True==1
-            choice = input("")
+            choice = input(" ")
             if choice in ["1", "2", "3"]:  # methods should be called
                 break
             else:
@@ -58,20 +61,20 @@ please chose number : """
             exit()
 
     # ======================================================================
-    @staticmethod
+    @staticmethod #از داخل کلاس هیچ اتربیوتی چون نمیخواهیم بدیم بهش 
     def print_header(user, username):
         login_msg = Fore.YELLOW + f" {user} ____________________ {username} _______________________  Logged in!" + Style.RESET_ALL
         print(login_msg)
 
-    @staticmethod
+    @staticmethod  # همون نمونه سازی نداره برای همون
     def get_course_list():
-        course = json.load(open("db_course.json"))
-        courses = course.get("courses") or []
-
+        course = json.load(open("db_course.json")) #dic
+        courses = course.get("courses", [])  #default value []
         x = PrettyTable()
         x.field_names = ["id", "Course", "Capacity", "Remaining", "Unit", "Teacher"]
-        for e, item in enumerate(courses, start=1):
-            x.add_row([e] + list(item.values()))
+        for e, item in enumerate(courses, start=1): #meqdar e=index , item=valu statrt = shomarande az chand shoro she 
+            x.add_row([e] + list(item.values())) # header
+            #tabale beauty
         x = str(x).replace("+-", Style.BRIGHT + Fore.LIGHTGREEN_EX + "x-")
         x = str(x).replace("-+", "-+" + Style.RESET_ALL)
         x = str(x).replace("|", Style.BRIGHT + Fore.LIGHTGREEN_EX + "|" + Style.RESET_ALL)
@@ -81,18 +84,15 @@ please chose number : """
     @staticmethod
     def search_course_list(name=None):
         course_file = json.load(open("db_course.json"))
-        courses = course_file.get("courses") or []
-        f = list(filter(lambda course: course["course"] == name, courses))
-        if len(f) > 0:
+        courses = course_file.get("courses" , []) 
+        f = list(filter(lambda course: course["course"] == name, courses)) #input = name
+        if len(f) > 0: # shart null nabodan moqe search
             x = PrettyTable()
             x.field_names = ["Course", "Capacity", "Remaining", "Unit", "Teacher"]
             for item in f:
                 x.add_row(item.values())
             print(x)
-
-        # x = PrettyTable()
-        # x.field_names = ["Course","Capacity","Remaining","Unit","Teacher"]
-
+       
     def student_menu(self):
 
         while True:
@@ -146,7 +146,7 @@ please chose number : """
         units = self.get_student_unit()
         print(f"All Units: {units}")
         while 1:
-            inp = input("Enter lesson id>>")
+            inp = input("Enter lesson id>> or q for exit...")
             os.system(clr)
             if inp in [str(i) for i in range(1, int(len(last)) + 1)]:
                 break
@@ -155,9 +155,9 @@ please chose number : """
             else:
                 print(Fore.RED + Style.BRIGHT + "NOT VALID" + Style.RESET_ALL)
                 last = self.get_course_list()
-
+#entekhab vahed 
         cn = last[int(inp) - 1]['course']
-        if int(last[int(inp) - 1]['unit']) + units > 20:
+        if int(last[int(inp) - 1]['unit']) + units >= 20:
             print(Style.BRIGHT + Fore.RED + f"You can't pick this course! your units : {units} and max units: 20")
             self.select_lesson()
         data = json.load(open("db_st.json"))
@@ -166,13 +166,23 @@ please chose number : """
                 if not student.get("courses"):
                     student['courses'] = []
                 if cn not in student['courses']:
-                    student['courses'].append(cn)
-                    json.dump(data, open("db_st.json", "w"))
-
-                    os.system(clr)
-                    print(Fore.GREEN + Style.BRIGHT + f"Course `{cn}` added to your courses" + Style.RESET_ALL)
-                    self.student_menu()
-
+                    _courses = json.load(open("db_course.json"))
+                    rem = int(last[int(inp) - 1]['remaining']) #get remaining in list of courses
+                    if rem > 0:
+                        rem -= 1
+                        _courses["courses"][int(inp) - 1]['remaining'] = rem
+                        json.dump(_courses, open("db_course.json", "w"),indent=4)
+                        student['courses'].append(cn)
+                        json.dump(data, open("db_st.json", "w"),indent=4)
+                        print(Fore.GREEN + Style.BRIGHT + f"\t\t\tCourse `{cn}` added to your courses" + Style.RESET_ALL)
+                        os.system("pause")
+                        os.system(clr)
+                        self.student_menu()
+                    else:
+                        print(Fore.RED + Style.BRIGHT + "the capicity of this course is complete!" + Style.RESET_ALL)
+                        os.system("pause")
+                        os.system(clr)
+                        self.student_menu()
                 else:
                     os.system(clr)
                     print(
@@ -181,7 +191,7 @@ please chose number : """
                     self.select_lesson()
                 break
 
-    def responsible_menu(self, ):
+    def responsible_menu(self):
 
         while 1:
             choice = input(
@@ -255,7 +265,7 @@ please chose number : """
                 if data.get("courses") is None:
                     data["courses"] = []
                 data["courses"].append(db_course)
-                json.dump(data, open("db_course.json", "w"))
+                json.dump(data, open("db_course.json", "w"),indent=4)
                 print(Fore.GREEN + Style.BRIGHT + "\n\t\tCourse was created successfully!!" + Style.RESET_ALL)
             else:
                 print(Fore.YELLOW + Style.BRIGHT + "\n\t\tBack to Menu" + Style.RESET_ALL)
@@ -373,17 +383,48 @@ please chose number : """
             else:
                 os.system(clr)
                 print(Fore.RED + f"\t\t\tYou must only select specified NUMBER")
-                print('\t' * 4 + f"Please try again !" + Style.RESET_ALL)
+                print('\t' * 4 + f"Please try again !" + Style.RESET_ALL)      
         if choice == "1":
             self.get_course_list()
+            os.system("pause")
+            os.system(clr)
+            self.teacher_menu()
+
         elif choice == "2":
             name = input('\nEnter The course name (q for Quit): ')
             if name == "q":
                 os.system(clr)
             else:
                 self.search_course_list(name)
+            os.system("pause")
+            os.system(clr)
             self.teacher_menu()
+
+        elif choice == "3":
+            global temp_username
+            course = json.load(open("db_course.json")) #dic
+            courses = course.get("courses", [])  #default value []
+            courses = list(filter(lambda e: e["teacher"] == temp_username, courses))
+            if len(courses) > 0:
+                x = PrettyTable()
+                x.field_names = ["id", "Course", "Capacity", "Remaining", "Unit", "Teacher"]
+                for e, item in enumerate(courses, start=1): #meqdar e=index , item=valu statrt = shomarande az chand shoro she 
+                    x.add_row([e] + list(item.values())) # header
+                x = str(x).replace("+-", Style.BRIGHT + Fore.LIGHTGREEN_EX + "x-")
+                x = str(x).replace("-+", "-+" + Style.RESET_ALL)
+                x = str(x).replace("|", Style.BRIGHT + Fore.LIGHTGREEN_EX + "|" + Style.RESET_ALL)
+                print(x)
+                os.system("pause")
+                os.system(clr)
+                self.teacher_menu()
+            else:
+                print(Fore.RED + "\t\t\tYou have no course!!")
+                print("Press any key to continue..." + Style.RESET_ALL)
+                os.system(clr)
+                self.teacher_menu()
+
         elif choice == "7":
+            os.system(clr)
             self.select_course()
 
     # ======================================================================
@@ -404,7 +445,7 @@ please chose number : """
                 if data.get("students") is None:
                     data["students"] = []
                 data["students"].append(db_st)
-                json.dump(data, open("db_st.json", "w"))
+                json.dump(data, open("db_st.json", "w"),indent=4)
             elif number == "2":
                 db_re = {
                     "username": user_name,
@@ -414,7 +455,7 @@ please chose number : """
                 if data.get("reception") is None:
                     data["reception"] = []
                 data["reception"].append(db_re)
-                json.dump(data, open("db_re.json", "w"))
+                json.dump(data, open("db_re.json", "w"),indent=4)
             elif number == "3":
                 db_te = {
                     "username": user_name,
@@ -424,21 +465,14 @@ please chose number : """
                 if data.get("teacher") is None:
                     data["teacher"] = []
                 data["teacher"].append(db_te)
-                json.dump(data, open("db_te.json", "w"))
+                json.dump(data, open("db_te.json", "w"),indent=4)
             os.system(clr)
             print(Fore.GREEN + "\n\t\tYour account was created successfully!!" + Style.RESET_ALL)
             self.main_menu()
         else:
+            os.system(clr)
             print("passwords doesn't mach !")
-            self.menu_in_up()
-
-
-    def teacher_menu(self):
-        print("1 - LIST\n2 - SEARCH\n3 - SELECTED\n4 - SELECT\n5 - STUDENTS")
-        while 1:
-            inp = input(">>")
-            if inp in [str(i) for i in range(1, 6)]:
-                self.teacher_menu()
+            self.sign_up(number)
 
     def sign_in(self, number):
         while 1:
@@ -482,6 +516,8 @@ please chose number : """
         elif number == "3":
             data = json.load(open("db_te.json"))
             teacher = data.get("teacher") or []
+            global temp_username
+            temp_username = user_name
             f = list(filter(lambda x: x["username"] == user_name and x["password"] == hp, teacher))
             if len(f) > 0:
                 os.system(clr)
@@ -493,6 +529,7 @@ please chose number : """
             print(".......")
         if failed is True:
             print("User or pass is wrong")
+            self.sign_in(number)
 
 
 app = App()

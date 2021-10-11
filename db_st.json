@@ -1,1 +1,24 @@
-{"students": [{"Id": 1633386791, "username": "mehrimah", "password": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3", "courses": ["c++"]}]}
+{
+    "students": [
+        {
+            "Id": 1633386791,
+            "username": "mehrimah",
+            "password": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+            "courses": [
+                "c++",
+                "python",
+                "java",
+                "php"
+            ]
+        },
+        {
+            "Id": 1633986016,
+            "username": "asqar",
+            "password": "af9f56f0213a81a4de60a109bb5ad8a5118fa2f5a0fc49309eefaba8fdacdc75",
+            "courses": [
+                "c++",
+                "python"
+            ]
+        }
+    ]
+}

@@ -1,1 +1,32 @@
-{"courses": [{"course": "c++", "capacity": "10", "remaining": "5", "unit": "3", "teacher": "ahmadi"}]}
+{
+    "courses": [
+        {
+            "course": "c++",
+            "capacity": "10",
+            "remaining": 4,
+            "unit": "3",
+            "teacher": "ahmadi"
+        },
+        {
+            "course": "python",
+            "capacity": "20",
+            "remaining": 4,
+            "unit": "3",
+            "teacher": "amiri"
+        },
+        {
+            "course": "php",
+            "capacity": "15",
+            "remaining": 0,
+            "unit": "3",
+            "teacher": "amiri"
+        },
+        {
+            "course": "java",
+            "capacity": "20",
+            "remaining": 6,
+            "unit": "3",
+            "teacher": "ahmadi"
+        }
+    ]
+}
